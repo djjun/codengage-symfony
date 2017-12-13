@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Customer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,15 +19,11 @@ class CustomerController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $service = $this->container->get('app.service.customer_service');
+
         $filter = $request->get('search');
 
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
-
-        $repository = $em->getRepository(Customer::class);
-
-        $customers = $repository->search($filter);
+        $customers = $service->search($filter);
 
         return $this->render('customer/index.html.twig', [
             'customers' => $customers,
@@ -56,9 +51,21 @@ class CustomerController extends Controller
      */
     public function storeAction(Request $request)
     {
-        $customer = $this->service->create($request->get('name'), $request->get('bornAt'));
+        $service = $this->container->get('app.service.customer_service');
 
-        $this->addFlash('success', "Cliente '" . $customer->getName() . "' cadastrado com sucesso!");
+        $name = $request->get('name');
+        $bornAt = $request->get('bornAt');
+
+        try {
+            $service->create($name, $bornAt);
+
+            $this->addFlash('success', "Cliente '$name' cadastrado com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao cadastrar o cliente '$name'!",
+                'body' => $e->getMessage()
+            ]);
+        }
 
         return $this->redirectToRoute('customers.index');
     }

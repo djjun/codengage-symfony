@@ -4,7 +4,9 @@
 
 {% block body %}
     <div class="container">
-        <form action="{{ path('customers.update', {id: customer.id}) }}" method="put">
+        <form action="{{ path('customers.update', {id: customer.id}) }}" method="post">
+            <input type="hidden" name="_method" value="put" />
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
