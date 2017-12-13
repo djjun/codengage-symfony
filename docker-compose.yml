@@ -1,0 +1,31 @@
+#load_balancer:
+#  image: tutum/haproxy
+#  links:
+#    - web
+#  ports:
+#    - 80:80
+
+database:
+  image: mysql
+  restart: always
+  ports:
+    - 3306:3306
+  environment:
+    - MYSQL_DATABASE=symfony
+    - MYSQL_ROOT_PASSWORD=123senha4
+
+#web:
+#  image: andrewmclagan/nginx-hhvm
+#  restart: always
+#  links:
+#    - database
+#  volumes:
+#    - ./:/var/www
+#    - ./.data/nginx:/etc/nginx/sites-enabled
+#  environment:
+#    - APP_ENV=local
+#    - APP_DEBUG=true
+#    - APP_LOG_LEVEL=debug
+#    - DB_DATABASE=develop
+#    - DB_PASSWORD=123senha4
+#    - VIRTUAL_HOST=api.its-delta.dev
