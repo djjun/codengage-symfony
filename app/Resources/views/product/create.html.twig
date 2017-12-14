@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produtos - Novo{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <form action="{{ path('products.store') }}" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="name">Código</label>
+                        <input type="text" name="code" id="code" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="name">Preço</label>
+                        <input type="text" name="price" id="price" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{ path('products.index') }}">Cancelar</a>
+
+                    <button type="submit" class="btn btn-primary pull-right">Criar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

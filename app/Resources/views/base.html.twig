@@ -28,8 +28,8 @@
                         <li class="{% if app.request.attributes.get('_route') starts with 'customers' %}active{% endif %}">
                             <a href="{{ path('customers.index') }}">Clientes</a>
                         </li>
-                        <li>
-                            <a href="#">Produtos</a>
+                        <li class="{% if app.request.attributes.get('_route') starts with 'products' %}active{% endif %}">
+                            <a href="{{ path('products.index') }}">Produtos</a>
                         </li>
                         <li>
                             <a href="#">Pedidos</a>

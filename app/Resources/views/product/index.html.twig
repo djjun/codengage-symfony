@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% for type, messages in app.session.flashBag.all %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <h1>Produtos</h1>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="{{ path('products.index') }}" method="get">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </div>
+                                <input type="search" name="search" class="form-control" placeholder="Buscar por: nome, código ou preço" value="{{ filter }}" required>
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">
+                                        Buscar
+                                    </button>
+                                    {% if filter %}
+                                    <a href="{{ path('products.index') }}" class="btn btn-info">
+                                        Limpar
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ path('products.create') }}" class="btn btn-primary pull-right">
+                            <i class="glyphicon glyphicon-plus"></i> Novo
+                        </a>
+                    </div>
+                </div>
+
+                <hr />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Código</th>
+                            <th>Preço</th>
+                            <th width="100"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('products.show', {id: product.id}) }}">{{ product.name }}</a>
+                            </td>
+                            <td>
+                                {{ customer.code }}
+                            </td>
+                            <td>
+                                {{ customer.price }}
+                            </td>
+                            <td>
+                                <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary">
+                                    <i class="glyphicon glyphicon-edit"></i>
+                                </a>
+                                <form action="{{ path('products.destroy', {id: product.id}) }}" method="delete">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
