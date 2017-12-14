@@ -9,7 +9,12 @@
                 {% for type, messages in app.session.flashBag.all %}
                     {% for message in messages %}
                         <div class="alert alert-{{ type }}">
-                            {{ message }}
+                            {% if message is iterable %}
+                                <strong>{{ message.title }}</strong><br>
+                                <p>{{ message.body }}</p>
+                            {% else %}
+                                <strong>{{ message }}</strong>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% endfor %}
@@ -69,7 +74,8 @@
                                 <a href="{{ path('customers.edit', {id: customer.id}) }}" class="btn btn-primary">
                                     <i class="glyphicon glyphicon-edit"></i>
                                 </a>
-                                <form action="{{ path('customers.destroy', {id: customer.id}) }}" method="delete">
+                                <form action="{{ path('customers.destroy', {id: customer.id}) }}" method="post" class="pull-right">
+                                    <input type="hidden" name="_method" value="delete" />
                                     <button type="submit" class="btn btn-danger">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </button>
