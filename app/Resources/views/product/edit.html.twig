@@ -4,7 +4,9 @@
 
 {% block body %}
     <div class="container">
-        <form action="{{ path('products.update', {id: product.id}) }}" method="put">
+        <form action="{{ path('products.update', {id: product.id}) }}" method="post">
+            <input type="hidden" name="_method" value="put" />
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -12,10 +14,22 @@
                         <input type="text" name="name" id="name" class="form-control" value="{{ product.name }}" required>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="name">Código</label>
+                        <input type="text" name="code" id="code" class="form-control" value="{{ product.code }}" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="name">Preço</label>
+                        <input type="text" name="price" id="price" class="form-control" value="{{ product.price }}" required>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <a href="{{ path('product.index') }}">Cancelar</a>
+                <div class="col-md-12">
+                    <a href="{{ path('products.index') }}">Cancelar</a>
 
                     <button type="submit" class="btn btn-primary pull-right">Atualizar</button>
                 </div>

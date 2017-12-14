@@ -13,18 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProductsController extends Controller
 {
-    /**
-     * @var ProductService
-     */
-    private $service;
-
-    /**
-     * ProductsController constructor.
-     */
-    public function __construct()
-    {
-        $this->service = new ProductService();
-    }
 
     /**
      * @Route("/products", name="products.index")
@@ -35,15 +23,11 @@ class ProductsController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $service = $this->container->get('app.service.product_service');
+
         $filter = $request->get('search');
 
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
-
-        $repository = $em->getRepository(Product::class);
-
-        $products = $repository->search($filter);
+        $products = $service->search($filter);
 
         return $this->render('product/index.html.twig', [
             'products' => $products,
@@ -71,12 +55,23 @@ class ProductsController extends Controller
      */
     public function storeAction(Request $request)
     {
-        $product = $this->service->create(
-            $request->get('name'),
-            $request->get('code'),
-            $request->get('price'));
+        $service = $this->container->get('app.service.product_service');
 
-        $this->addFlash('success', "Produto '" . $product->getName() . "' cadastrado com sucesso!");
+        $name = $request->get('name');
+        $code = $request->get('code');
+        $price = floatval($request->get('price'));
+
+
+        try {
+            $service->create($name, $code, $price);
+
+            $this->addFlash('success', "Produto '$name' cadastrado com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao cadastrar o produto '$name'!",
+                'body' => $e->getMessage()
+            ]);
+        }
 
         return $this->redirectToRoute('products.index');
     }
@@ -102,7 +97,7 @@ class ProductsController extends Controller
             throw $this->createNotFoundException("Produto não encontrado.");
         }
 
-        return $this->render('products/show.html.twig', [
+        return $this->render('product/show.html.twig', [
             'product' => $product
         ]);
     }
@@ -143,6 +138,7 @@ class ProductsController extends Controller
      */
     public function updateAction($id, Request $request)
     {
+
         $em = $this
             ->getDoctrine()
             ->getManager();
@@ -151,13 +147,17 @@ class ProductsController extends Controller
             ->getRepository('AppBundle:Product')
             ->find($id);
 
+
+
         if (is_null($product)) {
             throw $this->createNotFoundException("Produto não encontrado.");
         }
 
         $product
             ->setName($request->get('name'))
-            ->setBornAt($request->get('bornAt'));
+            ->setCode($request->get('code'))
+            ->setPrice(bcadd($request->get('price'), '0', 2));
+
 
         $em->persist($product);
         $em->flush();

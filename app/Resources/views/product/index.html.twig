@@ -64,16 +64,17 @@
                                 <a href="{{ path('products.show', {id: product.id}) }}">{{ product.name }}</a>
                             </td>
                             <td>
-                                {{ customer.code }}
+                                {{ product.code }}
                             </td>
                             <td>
-                                {{ customer.price }}
+                                {{ product.price }}
                             </td>
                             <td>
-                                <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary">
+                                <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary pull-left">
                                     <i class="glyphicon glyphicon-edit"></i>
                                 </a>
-                                <form action="{{ path('products.destroy', {id: product.id}) }}" method="delete">
+                                <form action="{{ path('products.destroy', {id: product.id}) }}" method="post" class="pull-left">
+                                    <input type="hidden" name="_method" value="delete" />
                                     <button type="submit" class="btn btn-danger">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </button>

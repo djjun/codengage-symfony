@@ -42,8 +42,9 @@ class ProductService
         return !is_null($product);
     }
 
-    public function create($code, $name, $price)
+    public function create($name, $code, $price)
     {
+
         if (empty(trim($code))) {
             throw new BadRequestHttpException("O campo 'código' é obrigatório.");
         }
@@ -56,8 +57,8 @@ class ProductService
             throw new BadRequestHttpException("O campo 'preço' é obrigatório.");
         }
 
-        if ($price > 0) {
-            throw new BadRequestHttpException("O campo 'preço' deve conter valor maior que 0.");
+        if ($price < 0) {
+            throw new BadRequestHttpException("O campo 'preço' deve conter valor maior que 0.00");
         }
 
         if ($this->codeExists($name)) {
