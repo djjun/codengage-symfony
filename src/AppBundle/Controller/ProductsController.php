@@ -63,7 +63,7 @@ class ProductsController extends Controller
         $name = $request->get('name');
         $code = $request->get('code');
         $price = $request->get('price');
-        $price = $this->BRLToDouble($price);
+        $price = $this->BRLToDecimal($price);
 
         try {
             $service->create($name, $code, $price);
@@ -142,7 +142,7 @@ class ProductsController extends Controller
         $name = $request->get('name');
         $code = $request->get('code');
         $price = $request->get('price');
-        $price = $this->BRLToDouble($price);
+        $price = $this->BRLToDecimal($price);
 
         try {
             $service->update($id, $name, $code, $price);

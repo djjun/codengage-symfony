@@ -4,7 +4,7 @@ namespace AppBundle\Traits;
 
 trait MoneyFormatter
 {
-    public function BRLToDouble($value)
+    public function BRLToDecimal($value)
     {
         $value = str_replace('.', '', $value);
         $value = str_replace(',', '.', $value);
@@ -13,7 +13,7 @@ trait MoneyFormatter
         return $value;
     }
 
-    public function DoubleToBRL($value)
+    public function DecimalToBRL($value)
     {
         $value = number_format($value, 2, ',', '.');
 
