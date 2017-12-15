@@ -31,8 +31,8 @@
                         <li class="{% if app.request.attributes.get('_route') starts with 'products' %}active{% endif %}">
                             <a href="{{ path('products.index') }}">Produtos</a>
                         </li>
-                        <li>
-                            <a href="#">Pedidos</a>
+                        <li class="{% if app.request.attributes.get('_route') starts with 'orders' %}active{% endif %}">
+                            <a href="{{ path('orders.index') }}">Pedidos</a>
                         </li>
                     </ul>
                 </div>

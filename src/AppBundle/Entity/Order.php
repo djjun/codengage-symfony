@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Order
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @ORM\Table(name="orders", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="order_number_unique", columns={"number"}),
  *     @ORM\UniqueConstraint(name="order_issued_at_unique", columns={"issued_at"}),

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pedido - {{ order.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <form action="{{ path('orders.update', {id: order.id}) }}" method="post">
+            <input type="hidden" name="_method" value="put" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Numero</label>
+                        <input type="text" name="number" id="number" class="form-control" value="{{ order.number }}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{ path('orders.index') }}">Cancelar</a>
+
+                    <button type="submit" class="btn btn-primary pull-right">Atualizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

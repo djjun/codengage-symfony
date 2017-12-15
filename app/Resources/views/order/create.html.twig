@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pedido - Novo{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <form action="{{ path('orders.store') }}" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Numero</label>
+                        <input type="text" name="number" id="number" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{ path('orders.index') }}">Cancelar</a>
+
+                    <button type="submit" class="btn btn-primary pull-right">Criar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
