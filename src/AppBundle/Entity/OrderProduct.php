@@ -34,7 +34,7 @@ class OrderProduct
     private $quantity;
 
     /**
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="decimal", scale=2)
      *
      * @var float
      */
@@ -48,7 +48,7 @@ class OrderProduct
     private $discount;
 
     /**
-     * @ORM\Column(name="total", type="float")
+     * @ORM\Column(name="total", type="decimal", scale=2)
      *
      * @var float
      */

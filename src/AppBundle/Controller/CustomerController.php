@@ -79,21 +79,19 @@ class CustomerController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.customer_service');
 
-        $customer = $em
-            ->getRepository('AppBundle:Customer')
-            ->find($id);
+        try {
+            $customer = $service->findOrFail($id);
 
-        if (is_null($customer)) {
-            throw $this->createNotFoundException("Cliente não encontrado.");
+            return $this->render('customer/show.html.twig', [
+                'customer' => $customer
+            ]);
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $this->redirectToRoute('customers.index');
         }
-
-        return $this->render('customer/show.html.twig', [
-            'customer' => $customer
-        ]);
     }
 
     /**
@@ -105,21 +103,19 @@ class CustomerController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.customer_service');
 
-        $customer = $em
-            ->getRepository('AppBundle:Customer')
-            ->find($id);
+        try {
+            $customer = $service->findOrFail($id);
 
-        if (is_null($customer)) {
-            throw $this->createNotFoundException("Cliente não encontrado.");
+            return $this->render('customer/edit.html.twig', [
+                'customer' => $customer
+            ]);
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $this->redirectToRoute('customers.index');
         }
-
-        return $this->render('customer/edit.html.twig', [
-            'customer' => $customer
-        ]);
     }
 
     /**
@@ -132,26 +128,21 @@ class CustomerController extends Controller
      */
     public function updateAction($id, Request $request)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.customer_service');
 
-        $customer = $em
-            ->getRepository('AppBundle:Customer')
-            ->find($id);
+        $name = $request->get('name');
+        $bornAt = $request->get('bornAt');
 
-        if (is_null($customer)) {
-            throw $this->createNotFoundException("Cliente não encontrado.");
+        try {
+            $service->update($id, $name, $bornAt);
+
+            $this->addFlash('success', "Cliente '" . $name . "' atualizado com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao atualizar o cliente '$name'!",
+                'body' => $e->getMessage()
+            ]);
         }
-
-        $customer
-            ->setName($request->get('name'))
-            ->setBornAt($request->get('bornAt'));
-
-        $em->persist($customer);
-        $em->flush();
-
-        $this->addFlash('success', "Cliente '" . $customer->getName() . "' atualizado com sucesso!");
 
         return $this->redirectToRoute('customers.index');
     }
@@ -165,22 +156,18 @@ class CustomerController extends Controller
      */
     public function destroyAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.customer_service');
 
-        $customer = $em
-            ->getRepository('AppBundle:Customer')
-            ->find($id);
+        try {
+            $service->destroy($id);
 
-        if (is_null($customer)) {
-            throw $this->createNotFoundException("Cliente não encontrado.");
+            $this->addFlash('success', "Cliente removido com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao remover o cliente!",
+                'body' => $e->getMessage()
+            ]);
         }
-
-        $em->remove($customer);
-        $em->flush();
-
-        $this->addFlash('success', "Cliente '" . $customer->getName() . "' removido com sucesso!");
 
         return $this->redirectToRoute('customers.index');
     }

@@ -4,15 +4,18 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
 use AppBundle\Service\ProductService;
+use AppBundle\Traits\MoneyFormatter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
 class ProductsController extends Controller
 {
+    use MoneyFormatter;
 
     /**
      * @Route("/products", name="products.index")
@@ -59,8 +62,8 @@ class ProductsController extends Controller
 
         $name = $request->get('name');
         $code = $request->get('code');
-        $price = floatval($request->get('price'));
-
+        $price = $request->get('price');
+        $price = $this->BRLToDecimal($price);
 
         try {
             $service->create($name, $code, $price);
@@ -85,21 +88,19 @@ class ProductsController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.product_service');
 
-        $product = $em
-            ->getRepository('AppBundle:Product')
-            ->find($id);
+        try {
+            $product = $service->findOrFail($id);
 
-        if (is_null($product)) {
-            throw $this->createNotFoundException("Produto não encontrado.");
+            return $this->render('product/show.html.twig', [
+                'product' => $product
+            ]);
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $this->redirectToRoute('products.index');
         }
-
-        return $this->render('product/show.html.twig', [
-            'product' => $product
-        ]);
     }
 
     /**
@@ -111,21 +112,19 @@ class ProductsController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.product_service');
 
-        $product = $em
-            ->getRepository('AppBundle:Product')
-            ->find($id);
+        try {
+            $product = $service->findOrFail($id);
 
-        if (is_null($product)) {
-            throw $this->createNotFoundException("Produto não encontrado.");
+            return $this->render('product/edit.html.twig', [
+                'product' => $product
+            ]);
+        } catch (\Exception $e) {
+            $this->addFlash('warning', $e->getMessage());
+
+            return $this->redirectToRoute('products.index');
         }
-
-        return $this->render('product/edit.html.twig', [
-            'product' => $product
-        ]);
     }
 
     /**
@@ -138,31 +137,23 @@ class ProductsController extends Controller
      */
     public function updateAction($id, Request $request)
     {
+        $service = $this->container->get('app.service.product_service');
 
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $name = $request->get('name');
+        $code = $request->get('code');
+        $price = $request->get('price');
+        $price = $this->BRLToDecimal($price);
 
-        $product = $em
-            ->getRepository('AppBundle:Product')
-            ->find($id);
+        try {
+            $service->update($id, $name, $code, $price);
 
-
-
-        if (is_null($product)) {
-            throw $this->createNotFoundException("Produto não encontrado.");
+            $this->addFlash('success', "Produto '" . $name . "' atualizado com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao atualizar o produto '$name'!",
+                'body' => $e->getMessage()
+            ]);
         }
-
-        $product
-            ->setName($request->get('name'))
-            ->setCode($request->get('code'))
-            ->setPrice(bcadd($request->get('price'), '0', 2));
-
-
-        $em->persist($product);
-        $em->flush();
-
-        $this->addFlash('success', "Produto '" . $product->getName() . "' atualizado com sucesso!");
 
         return $this->redirectToRoute('products.index');
     }
@@ -176,22 +167,18 @@ class ProductsController extends Controller
      */
     public function destroyAction($id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        $service = $this->container->get('app.service.product_service');
 
-        $product = $em
-            ->getRepository('AppBundle:Product')
-            ->find($id);
+        try {
+            $service->destroy($id);
 
-        if (is_null($product)) {
-            throw $this->createNotFoundException("Produto não encontrado.");
+            $this->addFlash('success', "Produto removido com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao remover o produto!",
+                'body' => $e->getMessage()
+            ]);
         }
-
-        $em->remove($product);
-        $em->flush();
-
-        $this->addFlash('success', "Produto '" . $product->getName() . "' removido com sucesso!");
 
         return $this->redirectToRoute('products.index');
     }

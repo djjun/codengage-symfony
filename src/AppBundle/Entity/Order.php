@@ -44,7 +44,7 @@ class Order
     private $issuedAt;
 
     /**
-     * @ORM\Column(name="total", type="float")
+     * @ORM\Column(name="total", type="decimal", scale=2)
      *
      * @var float
      */

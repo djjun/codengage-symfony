@@ -6,13 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {% for type, messages in app.session.flashBag.all %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ type }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
+                {% include '_partials/alert.html.twig' %}
 
                 <h1>Produtos</h1>
 
@@ -67,13 +61,13 @@
                                 {{ product.code }}
                             </td>
                             <td>
-                                {{ product.price }}
+                                R$ {{ product.price | number_format(2, ',', '.') }}
                             </td>
                             <td>
-                                <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary pull-left">
+                                <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary">
                                     <i class="glyphicon glyphicon-edit"></i>
                                 </a>
-                                <form action="{{ path('products.destroy', {id: product.id}) }}" method="post" class="pull-left">
+                                <form action="{{ path('products.destroy', {id: product.id}) }}" method="post" class="pull-right">
                                     <input type="hidden" name="_method" value="delete" />
                                     <button type="submit" class="btn btn-danger">
                                         <i class="glyphicon glyphicon-trash"></i>
