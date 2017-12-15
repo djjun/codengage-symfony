@@ -61,7 +61,7 @@
                                 {{ product.code }}
                             </td>
                             <td>
-                                {{ product.price }}
+                                R$ {{ product.price | number_format(2, ',', '.') }}
                             </td>
                             <td>
                                 <a href="{{ path('products.edit', {id: product.id}) }}" class="btn btn-primary">

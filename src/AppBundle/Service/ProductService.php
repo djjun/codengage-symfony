@@ -44,7 +44,6 @@ class ProductService
 
     public function create($name, $code, $price)
     {
-
         if (empty(trim($code))) {
             throw new BadRequestHttpException("O campo 'código' é obrigatório.");
         }
@@ -53,15 +52,19 @@ class ProductService
             throw new BadRequestHttpException("O campo 'nome' é obrigatório.");
         }
 
-        if (empty(trim($price))) {
+        if (!is_numeric($price)) {
             throw new BadRequestHttpException("O campo 'preço' é obrigatório.");
         }
 
-        if ($price < 0) {
+        if ($price <= 0) {
+            throw new BadRequestHttpException("O campo 'preço' deve ser maior que 0.");
+        }
+
+        if ($price <= 0) {
             throw new BadRequestHttpException("O campo 'preço' deve conter valor maior que 0.00");
         }
 
-        if ($this->codeExists($name)) {
+        if ($this->codeExists($code)) {
             throw new BadRequestHttpException("Este código já foi cadastrado.");
         }
 

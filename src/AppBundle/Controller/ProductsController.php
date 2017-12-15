@@ -59,8 +59,10 @@ class ProductsController extends Controller
 
         $name = $request->get('name');
         $code = $request->get('code');
-        $price = floatval($request->get('price'));
-
+        $price = $request->get('price');
+        $price = str_replace('.', '', $price);
+        $price = str_replace(',', '.', $price);
+        $price = doubleval($price);
 
         try {
             $service->create($name, $code, $price);
