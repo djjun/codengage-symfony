@@ -6,14 +6,13 @@
     <div class="container">
         <form action="{{ path('customers.store') }}" method="post">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="form-group">
                         <label for="name">Nome</label>
                         <input type="text" name="name" id="name" class="form-control" required>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="bornAt">Data de Nascimento</label>
@@ -22,7 +21,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <a href="{{ path('customers.index') }}">Cancelar</a>
 
                     <button type="submit" class="btn btn-primary pull-right">Criar</button>
