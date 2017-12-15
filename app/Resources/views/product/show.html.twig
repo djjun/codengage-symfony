@@ -9,7 +9,7 @@
                 <div class="jumbotron">
                     <h1>{{ product.name }}</h1>
                     Código: <strong>{{ product.code }}</strong> <br>
-                    Preço: <strong>{{ product.price }}</strong>
+                    Preço: <strong>{{ product.price | number_format(2, ',', '.') }}</strong>
                 </div>
             </div>
         </div>

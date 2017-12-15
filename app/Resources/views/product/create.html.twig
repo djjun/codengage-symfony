@@ -35,3 +35,12 @@
         </form>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
+    <script>
+      $(function() {
+        $('#price').maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: false});
+      })
+    </script>
+{% endblock %}

@@ -23,7 +23,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="name">Preço</label>
-                        <input type="text" name="price" id="price" class="form-control" value="{{ product.price }}" required>
+                        <input type="text" name="price" id="price" class="form-control" value="{{ product.price | number_format(2, ',', '.') }}" required>
                     </div>
                 </div>
             </div>
@@ -36,4 +36,13 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
+    <script>
+      $(function() {
+        $('#price').maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: false});
+      })
+    </script>
 {% endblock %}
