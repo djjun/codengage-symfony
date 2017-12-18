@@ -2,6 +2,8 @@
 
 ##Start server
 ```bash
-$ docker-composer up -d
+$ composer install
+$ docker-compose up -d
 $ php app/console server:start
+$ php app/console doctrine:migrations:migrate
 ```

@@ -43,7 +43,15 @@ class OrderController extends Controller
      */
     public function createAction()
     {
-        return $this->render('order/create.html.twig');
+        $customers = $this->container->get('app.service.customer_service')->search('');
+        $products = $this->container->get('app.service.product_service')->search('');
+
+        return $this->render('order/create.html.twig', [
+            'customers' => $customers,
+            'products' => $products
+
+        ]);
+
     }
 
     /**
@@ -54,6 +62,36 @@ class OrderController extends Controller
      * @return RedirectResponse
      */
     public function storeAction(Request $request)
+    {
+        $service = $this->container->get('app.service.order_service');
+
+        $name = $request->get('name');
+        $code = $request->get('code');
+        $price = floatval($request->get('price'));
+
+
+        try {
+            $service->create($name, $code, $price);
+
+            $this->addFlash('success', "Pedido '$name' cadastrado com sucesso!");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', [
+                'title' => "Falha ao cadastrar o pedido '$name'!",
+                'body' => $e->getMessage()
+            ]);
+        }
+
+        return $this->redirectToRoute('orders.index');
+    }
+
+    /**
+     * @Route("/orders/create", name="orderproduct.store")
+     * @Method("POST")
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeProductAction(Request $request)
     {
         $service = $this->container->get('app.service.order_service');
 

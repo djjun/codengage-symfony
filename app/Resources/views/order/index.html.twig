@@ -51,7 +51,10 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Numero</th>
+                            <th>Pessoa</th>
+                            <th>Número</th>
+                            <th>Data</th>
+                            <th>Total</th>
                             <th width="100"></th>
                         </tr>
                     </thead>
@@ -61,6 +64,9 @@
                             <td>
                                 <a href="{{ path('orders.show', {id: order.id}) }}">{{ order.number }}</a>
                             </td>
+                            <td> {{ order.customer }} </td>
+                            <td> {{ order.issuedAt }} </td>
+                            <td> {{ order.total }} </td>
                             <td>
                                 <a href="{{ path('orders.edit', {id: order.id}) }}" class="btn btn-primary pull-left">
                                     <i class="glyphicon glyphicon-edit"></i>

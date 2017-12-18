@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrderProduct
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderProductRepository")
  * @ORM\Table(name="order_products", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="order_product_quantity_unique", columns={"quantity"}),
  *     @ORM\UniqueConstraint(name="order_product_price_unique", columns={"price"}),
