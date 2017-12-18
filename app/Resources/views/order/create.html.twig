@@ -34,39 +34,17 @@
                     </div>
                 </form>
 
-                <table class="table table-striped">
+                <table id="table" class="table table-striped">
                     <thead>
                     <tr>
                         <th>Produto</th>
                         <th>Quantidade</th>
                         <th>Preço</th>
                         <th>Total</th>
-                        <th width="100">
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for order in orders %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('orders.show', {id: order.id}) }}">{{ order.number }}</a>
-                            </td>
-                            <td> {{ order.customer }} </td>
-                            <td> {{ order.issuedAt }} </td>
-                            <td> {{ order.total }} </td>
-                            <td>
-                                <a href="{{ path('orders.edit', {id: order.id}) }}" class="btn btn-primary pull-left">
-                                    <i class="glyphicon glyphicon-edit"></i>
-                                </a>
-                                <form action="{{ path('orders.destroy', {id: order.id}) }}" method="post" class="pull-left">
-                                    <input type="hidden" name="_method" value="delete" />
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
+
                     </tbody>
                 </table>
             </div>
@@ -74,7 +52,7 @@
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Inserir Produto</h5>
@@ -83,48 +61,55 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ path('orderproduct.store') }}" method="post">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="name">Produto</label>
-                                    <select class="form-control" id="name" name="name">
-                                        {% for product in products %}
-                                            <option value="{{ product.id }}">{{ product.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="quantity">Quantidade</label>
-                                    <input type="number" name="quantity" id="quantity" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="price">Preço</label>
-                                    <input type="text" name="price" id="price" class="form-control" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="total">Total</label>
-                                    <input type="text" name="total" id="total" class="form-control" disabled>
-                                </div>
+                    <div class="row" id="forms">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="name">Produto</label>
+                                <select class="form-control" id="name" name="name">
+                                    {% for product in products %}
+                                        <option value="{{ product | json_encode() }}">{{ product.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
 
-                                <button type="submit" class="btn btn-primary pull-right">Criar</button>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="quantity">Quantidade</label>
+                                <input type="number" name="quantity" id="quantity" class="form-control" required>
                             </div>
                         </div>
-                    </form>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button id="getValuesForm" data-dismiss="modal" class="btn btn-primary pull-right">Criar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+
+        $('#getValuesForm').click(function() {
+            var product = $('#forms').find('select[name="name"]').val();
+            var quantity = $('#forms').find('input[name="quantity"]').val();
+
+            console.log(product);
+
+            $('#table tbody').append([
+                "<tr>",
+                    "<td name='product'>" + product + "</td>",
+                    "<td name='quantity'>" + quantity + "</td>",
+                    "<td>0</td>",
+                    "<td>0</td>",
+                "</tr>"
+            ].join());
+        });
+
+    </script>
 {% endblock %}

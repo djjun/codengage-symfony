@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Order;
 use AppBundle\Service\OrderService;
+use function MongoDB\BSON\toJSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -43,10 +44,13 @@ class OrderController extends Controller
      */
     public function createAction()
     {
+        $service = $this->container->get('app.service.order_service');
+
         $customers = $this->container->get('app.service.customer_service')->search('');
-        $products = $this->container->get('app.service.product_service')->search('');
+        $products = $this->container->get('app.service.product_service')->search(null);
 
         return $this->render('order/create.html.twig', [
+            'orders' => $service,
             'customers' => $customers,
             'products' => $products
 
